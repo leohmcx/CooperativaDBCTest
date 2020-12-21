@@ -1,6 +1,6 @@
 # CooperativaDBCTest
 
-![Alt Text](https://github.com/leohmcx/cooperativadbctest/blob/master/logico.jpg)
+![Alt Text](https://github.com/leohmcx/cooperativadbctest/blob/main/logico.jpg)
 
 - API Backend restful para gerenciar votos de pautas de uma cooperativa
 
