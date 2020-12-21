@@ -20,5 +20,5 @@
 
 5: mvn spring-boot:run
 
-- A API est� dispon�vel no link (local) -> http://localhost:8080/
-- End-points criados dispon�vel para teste em (local) -> http://localhost:8080/swagger-ui/
+- A API estará disponível no link (local) -> http://localhost:8080/
+- End-points criados disponível para teste em (local) -> http://localhost:8080/swagger-ui.html#/
