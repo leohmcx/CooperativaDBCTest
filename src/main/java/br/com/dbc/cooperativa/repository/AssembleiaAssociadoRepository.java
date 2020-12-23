@@ -4,9 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import br.com.dbc.cooperativa.controller.dto.AssembleiaAssociadoVoto;
 import br.com.dbc.cooperativa.model.AssembleiaAssociado;
 import br.com.dbc.cooperativa.model.AssembleiaAssociadoKey;
+import br.com.dbc.cooperativa.model.dto.AssembleiaAssociadoVoto;
 
 public interface AssembleiaAssociadoRepository extends JpaRepository<AssembleiaAssociado, AssembleiaAssociadoKey> {
 

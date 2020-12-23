@@ -1,4 +1,4 @@
-package br.com.dbc.cooperativa.controller.form;
+package br.com.dbc.cooperativa.model.form;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -10,7 +10,13 @@ import br.com.dbc.cooperativa.model.Associado;
 import br.com.dbc.cooperativa.model.Voto;
 import br.com.dbc.cooperativa.repository.AssembleiaRepository;
 import br.com.dbc.cooperativa.repository.AssociadoRepository;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class AssembleiaAssociadoForm {
 
 	@NotNull @NotEmpty
@@ -23,30 +29,6 @@ public class AssembleiaAssociadoForm {
 	public AssembleiaAssociadoForm(@NotEmpty Long associadoId, @NotEmpty Long assembleiaId, @NotEmpty Voto voto) {
 		this.associadoId = associadoId;
 		this.assembleiaId = assembleiaId;
-		this.voto = voto;
-	}
-
-	public Long getAssociadoId() {
-		return associadoId;
-	}
-
-	public void setAssociadoId(Long associadoId) {
-		this.associadoId = associadoId;
-	}
-
-	public Long getAssembleiaId() {
-		return assembleiaId;
-	}
-
-	public void setAssembleiaId(Long assembleiaId) {
-		this.assembleiaId = assembleiaId;
-	}
-
-	public Voto getVoto() {
-		return voto;
-	}
-
-	public void setVoto(Voto voto) {
 		this.voto = voto;
 	}
 

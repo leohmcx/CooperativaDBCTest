@@ -23,10 +23,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.dbc.cooperativa.controller.dto.DetalhesDaPautaDto;
-import br.com.dbc.cooperativa.controller.dto.PautaDto;
-import br.com.dbc.cooperativa.controller.form.PautaForm;
 import br.com.dbc.cooperativa.model.Pauta;
+import br.com.dbc.cooperativa.model.dto.DetalhesDaPautaDto;
+import br.com.dbc.cooperativa.model.dto.PautaDto;
+import br.com.dbc.cooperativa.model.form.PautaForm;
 import br.com.dbc.cooperativa.repository.PautaRepository;
 
 @RestController

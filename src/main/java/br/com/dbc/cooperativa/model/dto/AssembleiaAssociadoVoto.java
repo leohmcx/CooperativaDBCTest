@@ -1,4 +1,4 @@
-package br.com.dbc.cooperativa.controller.dto;
+package br.com.dbc.cooperativa.model.dto;
 
 public interface AssembleiaAssociadoVoto {	
 	String getAssunto();

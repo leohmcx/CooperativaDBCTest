@@ -1,11 +1,17 @@
-package br.com.dbc.cooperativa.controller.dto;
+package br.com.dbc.cooperativa.model.dto;
 
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import br.com.dbc.cooperativa.model.Associado;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class DetalhesDoAssociadoDto {
 
 	private Long id;
@@ -19,38 +25,5 @@ public class DetalhesDoAssociadoDto {
 		this.nome = associado.getNome();
 		this.cpf = associado.getCpf();
 		this.dataCadastro = associado.getDataCadastro();
-	}
-	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getCpf() {
-		return cpf;
-	}
-
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
-	}
-
-	public LocalDateTime getDataCadastro() {
-		return dataCadastro;
-	}
-
-	public void setDataCadastro(LocalDateTime dataCadastro) {
-		this.dataCadastro = dataCadastro;
-	}
-
+	}	
 }

@@ -6,6 +6,13 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 @Embeddable
 public class AssembleiaAssociadoKey implements Serializable {
 
@@ -15,27 +22,9 @@ public class AssembleiaAssociadoKey implements Serializable {
 	private Long assembleiaId;
 	@Column(name = "associado_id")
 	private Long associadoId;
-	
-	public AssembleiaAssociadoKey() { }
 			
 	public AssembleiaAssociadoKey(Long assembleiaId, Long associadoId) {
 		this.assembleiaId = assembleiaId;
-		this.associadoId = associadoId;
-	}
-
-	public Long getAssembleiaId() {
-		return assembleiaId;
-	}
-
-	public void setAssembleiaId(Long assembleiaId) {
-		this.assembleiaId = assembleiaId;
-	}
-
-	public Long getAssociadoId() {
-		return associadoId;
-	}
-
-	public void setAssociadoId(Long associadoId) {
 		this.associadoId = associadoId;
 	}
 

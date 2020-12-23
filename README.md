@@ -14,11 +14,9 @@
 
 2: Instale o Maven -> https://maven.apache.org/download.cgi
 
-3: Configurados, na pasta do projeto pelo terminal execute os comandos
+3: Instale o Lombok no eclipse, instruções: https://projectlombok.org/setup/eclipse
 
-4: mvn clean install
-
-5: mvn spring-boot:run
+4: Configurados, na pasta do projeto pelo terminal execute os comandos: [mvn clean install] e [mvn spring-boot:run]
 
 - A API estará disponível no link (local) -> http://localhost:8080/
 - End-points criados disponível para teste em (local) -> http://localhost:8080/swagger-ui.html#/
