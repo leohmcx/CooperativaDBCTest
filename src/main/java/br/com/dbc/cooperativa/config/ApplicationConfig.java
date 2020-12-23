@@ -19,7 +19,11 @@ public class ApplicationConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("*/**").permitAll();
+		http.authorizeRequests()
+        .antMatchers("/").permitAll()
+        .antMatchers("/h2-console/**").permitAll()
+        .and().csrf().disable()
+		.headers().frameOptions().disable();
 	}
 
 	@Bean

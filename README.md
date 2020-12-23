@@ -20,3 +20,4 @@
 
 - A API estará disponível no link (local) -> http://localhost:8080/
 - End-points criados disponível para teste em (local) -> http://localhost:8080/swagger-ui.html#/
+- Banco de dados utilizado em memória após a execução do API -> http://localhost:8080/h2-console -> url jdbc:h2:mem:cooperativa

@@ -7,7 +7,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,8 +25,10 @@ public class Assembleia {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@ManyToOne
-	@JoinColumn(name = "pauta_id")
+	@OneToOne
+	@MapsId
+	@JoinColumn(name = "pauta_id")	
+	@JsonManagedReference(value = "pauta-assembleia")
 	private Pauta pauta;
 	private LocalDateTime inicio = LocalDateTime.now();
 	private LocalDateTime fim = LocalDateTime.now().plusMinutes(1);

@@ -61,11 +61,11 @@ public class AssembleiaController {
 			assembleia = assembleiaRepository.findByPautaAssunto(assunto, paginacao);
 		return AssembleiaDto.converter(assembleia);
 	}
-	
+
 	@GetMapping("/{id}")
 	public ResponseEntity<AssembleiaAssociadoVoto> detalhar(@PathVariable Long id) {
 		AssembleiaAssociadoVoto aav = assembleiaAssociadoRepository.findVotosByAssembleiaId(id);
-		if(aav != null) {
+		if (aav != null) {
 			return ResponseEntity.ok(aav);
 		}
 		return ResponseEntity.notFound().build();
@@ -76,24 +76,25 @@ public class AssembleiaController {
 	@CacheEvict(value = "listaDeAssembleias", allEntries = true)
 	public ResponseEntity<AssembleiaDto> cadastrar(@RequestBody AssembleiaForm form, UriComponentsBuilder uriBuilder) {
 		Optional<Pauta> pauta = pautaRepository.findById(form.getPautaId());
-		Assembleia assembleia = new Assembleia();
-		if (pauta.isPresent()) {
-			assembleia = form.converter(assembleiaRepository, pauta.get());
+		Optional<Assembleia> a = assembleiaRepository.findByPautaId(form.getPautaId());
+		if (pauta.isPresent() && !a.isPresent()) {
+			Assembleia assembleia = form.converter(assembleiaRepository, pauta.get());
 			assembleiaRepository.save(assembleia);
 			URI uri = uriBuilder.path("/assembleia/{id}").buildAndExpand(assembleia.getId()).toUri();
 			return ResponseEntity.created(uri).body(new AssembleiaDto(assembleia));
 		}
-		return ResponseEntity.notFound().build();
+		return ResponseEntity.badRequest().build();
 	}
-	
+
 	@PutMapping
 	@Transactional
-	public ResponseEntity<AssembleiaAssociadoDto> votar(@RequestBody AssembleiaAssociadoForm form, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<AssembleiaAssociadoDto> votar(@RequestBody AssembleiaAssociadoForm form,
+			UriComponentsBuilder uriBuilder) {
 
 		Optional<Assembleia> assembleia = assembleiaRepository.findById(form.getAssembleiaId());
 		Optional<Associado> associado = associadoRepository.findById(form.getAssociadoId());
 		AssembleiaAssociado assembleiaAssociado = new AssembleiaAssociado();
-		
+
 		if (associado.isPresent() && assembleia.isPresent()) {
 			assembleiaAssociado = form.converter(assembleiaRepository, associadoRepository, assembleia.get(), associado.get(), form.getVoto());
 			assembleiaAssociadoRepository.save(assembleiaAssociado);
