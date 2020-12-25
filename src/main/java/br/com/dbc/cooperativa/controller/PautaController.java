@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +29,9 @@ import br.com.dbc.cooperativa.model.dto.DetalhesDaPautaDto;
 import br.com.dbc.cooperativa.model.dto.PautaDto;
 import br.com.dbc.cooperativa.model.form.PautaForm;
 import br.com.dbc.cooperativa.repository.PautaRepository;
+import io.swagger.annotations.Api;
 
+@Api(tags = "Pauta")
 @RestController
 @RequestMapping("/pauta")
 public class PautaController {
@@ -36,7 +39,7 @@ public class PautaController {
 	@Autowired
 	private PautaRepository pautaRepository;
 	
-	@GetMapping
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@Cacheable(value = "listaDePautas")
 	public Page<PautaDto> lista(@RequestParam(required = false) String assuntoPauta
 			, @PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable paginacao){
@@ -51,7 +54,7 @@ public class PautaController {
 		}
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<DetalhesDaPautaDto> detalhar(@PathVariable Long id) {
 		Optional<Pauta> pauta = pautaRepository.findById(id);
 		if(pauta.isPresent()) {
@@ -60,8 +63,8 @@ public class PautaController {
 		return ResponseEntity.notFound().build();
 	}
 	
-	@PostMapping
 	@Transactional
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)	
 	@CacheEvict(value = "listaDePautas", allEntries = true)
 	public ResponseEntity<PautaDto> cadastrar(@RequestBody @Valid PautaForm form, UriComponentsBuilder uriBuilder) {
 		Pauta pauta = form.converter(pautaRepository);

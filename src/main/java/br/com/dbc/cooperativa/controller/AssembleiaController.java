@@ -1,6 +1,7 @@
 package br.com.dbc.cooperativa.controller;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,7 +38,9 @@ import br.com.dbc.cooperativa.repository.AssembleiaAssociadoRepository;
 import br.com.dbc.cooperativa.repository.AssembleiaRepository;
 import br.com.dbc.cooperativa.repository.AssociadoRepository;
 import br.com.dbc.cooperativa.repository.PautaRepository;
+import io.swagger.annotations.Api;
 
+@Api(tags = "Assembleia")
 @RestController
 @RequestMapping("/assembleia")
 public class AssembleiaController {
@@ -50,7 +54,7 @@ public class AssembleiaController {
 	@Autowired
 	private AssembleiaAssociadoRepository assembleiaAssociadoRepository;
 
-	@GetMapping
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@Cacheable(value = "listaDeAssembleias")
 	public Page<AssembleiaDto> lista(@RequestParam(required = false) String assunto,
 			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable paginacao) {
@@ -62,7 +66,7 @@ public class AssembleiaController {
 		return AssembleiaDto.converter(assembleia);
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<AssembleiaAssociadoVoto> detalhar(@PathVariable Long id) {
 		AssembleiaAssociadoVoto aav = assembleiaAssociadoRepository.findVotosByAssembleiaId(id);
 		if (aav != null) {
@@ -71,11 +75,11 @@ public class AssembleiaController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@PostMapping
 	@Transactional
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)	
 	@CacheEvict(value = "listaDeAssembleias", allEntries = true)
 	public ResponseEntity<AssembleiaDto> cadastrar(@RequestBody AssembleiaForm form, UriComponentsBuilder uriBuilder) {
-		Optional<Pauta> pauta = pautaRepository.findById(form.getPautaId());
+		Optional<Pauta> pauta  = pautaRepository.findById(form.getPautaId());
 		Optional<Assembleia> a = assembleiaRepository.findByPautaId(form.getPautaId());
 		if (pauta.isPresent() && !a.isPresent()) {
 			Assembleia assembleia = form.converter(assembleiaRepository, pauta.get());
@@ -86,18 +90,18 @@ public class AssembleiaController {
 		return ResponseEntity.badRequest().build();
 	}
 
-	@PutMapping
 	@Transactional
+	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<AssembleiaAssociadoDto> votar(@RequestBody AssembleiaAssociadoForm form,
 			UriComponentsBuilder uriBuilder) {
 
-		Optional<Assembleia> assembleia = assembleiaRepository.findById(form.getAssembleiaId());
+		Optional<Assembleia> assembleia = assembleiaRepository.findByDate(form.getAssembleiaId(), String.valueOf(LocalDateTime.now()));
 		Optional<Associado> associado = associadoRepository.findById(form.getAssociadoId());
 		AssembleiaAssociado assembleiaAssociado = new AssembleiaAssociado();
-
+		
 		if (associado.isPresent() && assembleia.isPresent()) {
 			assembleiaAssociado = form.converter(assembleiaRepository, associadoRepository, assembleia.get(), associado.get(), form.getVoto());
-			assembleiaAssociadoRepository.save(assembleiaAssociado);
+			assembleiaAssociadoRepository.saveAndFlush(assembleiaAssociado);
 			URI uri = uriBuilder.path("/assembleiaassociado/{id}").buildAndExpand(assembleiaAssociado.getId()).toUri();
 			return ResponseEntity.created(uri).body(new AssembleiaAssociadoDto(assembleiaAssociado));
 		}

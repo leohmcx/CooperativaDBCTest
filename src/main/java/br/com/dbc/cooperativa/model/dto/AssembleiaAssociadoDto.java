@@ -1,5 +1,8 @@
 package br.com.dbc.cooperativa.model.dto;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
 import br.com.dbc.cooperativa.model.Assembleia;
 import br.com.dbc.cooperativa.model.AssembleiaAssociado;
 import br.com.dbc.cooperativa.model.Associado;
@@ -15,6 +18,7 @@ public class AssembleiaAssociadoDto {
 
 	private Associado associado;
 	private Assembleia assembleia;
+	@Enumerated(EnumType.STRING)
 	private Voto voto;	
 	
 	public AssembleiaAssociadoDto(AssembleiaAssociado assembleiaAssociado) {		

@@ -1,5 +1,7 @@
 package br.com.dbc.cooperativa.model.form;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.NotEmpty;
 
 import com.sun.istack.NotNull;
@@ -23,7 +25,7 @@ public class AssembleiaAssociadoForm {
 	private Long associadoId;
 	@NotNull @NotEmpty
 	private Long assembleiaId;
-	@NotNull @NotEmpty
+	@NotNull @NotEmpty @Enumerated(EnumType.STRING)
 	private Voto voto;
 	
 	public AssembleiaAssociadoForm(@NotEmpty Long associadoId, @NotEmpty Long assembleiaId, @NotEmpty Voto voto) {
