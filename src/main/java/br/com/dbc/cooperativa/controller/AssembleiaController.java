@@ -68,9 +68,9 @@ public class AssembleiaController {
 
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<AssembleiaAssociadoVoto> detalhar(@PathVariable Long id) {
-		AssembleiaAssociadoVoto aav = assembleiaAssociadoRepository.findVotosByAssembleiaId(id);
-		if (aav != null) {
-			return ResponseEntity.ok(aav);
+		Optional<AssembleiaAssociadoVoto> aav = assembleiaAssociadoRepository.findVotosByAssembleiaId(id);
+		if (aav.isPresent()) {
+			return ResponseEntity.ok(aav.get());
 		}
 		return ResponseEntity.notFound().build();
 	}
@@ -95,7 +95,11 @@ public class AssembleiaController {
 	public ResponseEntity<AssembleiaAssociadoDto> votar(@RequestBody AssembleiaAssociadoForm form,
 			UriComponentsBuilder uriBuilder) {
 
-		Optional<Assembleia> assembleia = assembleiaRepository.findByDate(form.getAssembleiaId(), String.valueOf(LocalDateTime.now()));
+		Optional<Assembleia> assembleia = assembleiaRepository
+				.findByIdAndInicioLessThanEqualAndFimGreaterThanEqual(form.getAssembleiaId()
+																, LocalDateTime.now()
+																, LocalDateTime.now());
+		
 		Optional<Associado> associado = associadoRepository.findById(form.getAssociadoId());
 		AssembleiaAssociado assembleiaAssociado = new AssembleiaAssociado();
 		

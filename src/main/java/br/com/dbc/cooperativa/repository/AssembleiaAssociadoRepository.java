@@ -1,5 +1,7 @@
 package br.com.dbc.cooperativa.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,5 +22,5 @@ public interface AssembleiaAssociadoRepository extends JpaRepository<AssembleiaA
 			+ " GROUP BY P.ASSUNTO, A.INICIO, A.FIM "
 			+ ", (SELECT COUNT(1) FROM ASSEMBLEIA_ASSOCIADO AA1 WHERE AA1.ASSEMBLEIA_ID = AA.ASSEMBLEIA_ID AND aa1.VOTO = 'S') "
 			+ ", (SELECT COUNT(1) FROM ASSEMBLEIA_ASSOCIADO AA2 WHERE AA2.ASSEMBLEIA_ID = AA.ASSEMBLEIA_ID AND aa2.VOTO = 'N') ", nativeQuery = true)
-	AssembleiaAssociadoVoto findVotosByAssembleiaId(@Param("pId") Long id);
+	Optional<AssembleiaAssociadoVoto> findVotosByAssembleiaId(@Param("pId") Long id);
 }
