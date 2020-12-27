@@ -1,8 +1,5 @@
 package br.com.dbc.cooperativa.controller;
 
-import java.net.URI;
-import java.util.Optional;
-
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -13,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,14 +20,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.dbc.cooperativa.model.Associado;
 import br.com.dbc.cooperativa.model.dto.AssociadoDto;
 import br.com.dbc.cooperativa.model.dto.DetalhesDoAssociadoDto;
 import br.com.dbc.cooperativa.model.form.AssociadoForm;
-import br.com.dbc.cooperativa.repository.AssociadoRepository;
+import br.com.dbc.cooperativa.service.AssociadoService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @Api(tags = "Associado")
 @RestController
@@ -37,39 +34,27 @@ import io.swagger.annotations.Api;
 public class AssociadoController {
 	
 	@Autowired
-	private AssociadoRepository associadoRepository;
+	private AssociadoService service;
 	
+	@ApiOperation(value = "Obter Associado por Id")
+	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<DetalhesDoAssociadoDto> obterPorId(@PathVariable Long id) {
+		return ResponseEntity.ok(service.obterPorId(id));
+	}
+	
+	@ApiOperation(value = "Obter todos os Associados")
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@Cacheable(value = "listaDeAssociados")
-	public Page<AssociadoDto> lista(@RequestParam(required = false) String nome
+	public ResponseEntity<Page<AssociadoDto>> obterTodos(@RequestParam(required = false) String nome
 			, @PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable paginacao){
-				
-		if(nome == null) { 
-			Page<Associado> associados = associadoRepository.findAll(paginacao);
-			return AssociadoDto.converter(associados);
-		}
-		else { 
-			Page<Associado> associados = associadoRepository.findByNome(nome, paginacao);
-			return AssociadoDto.converter(associados);
-		}
-	}
-	
-	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<DetalhesDoAssociadoDto> detalhar(@PathVariable Long id) {
-		Optional<Associado> associado = associadoRepository.findById(id);
-		if(associado.isPresent()) {
-			return ResponseEntity.ok(new DetalhesDoAssociadoDto(associado.get()));
-		}
-		return ResponseEntity.notFound().build();
-	}
+		return ResponseEntity.ok(service.obterTodos(nome, paginacao));
+	}	
 	
 	@Transactional
-	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)	
+	@ApiOperation(value = "Incluir Associado")
 	@CacheEvict(value = "listaDeAssociados", allEntries = true)
-	public ResponseEntity<AssociadoDto> cadastrar(@RequestBody @Valid AssociadoForm form, UriComponentsBuilder uriBuilder) {
-		Associado associado = form.converter(associadoRepository);
-		associadoRepository.save(associado);		
-		URI uri = uriBuilder.path("/associado/{id}").buildAndExpand(associado.getId()).toUri();
-		return ResponseEntity.created(uri).body(new AssociadoDto(associado));
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)	
+	public ResponseEntity<AssociadoDto> incluir(@RequestBody @Valid AssociadoForm form) {
+		return new ResponseEntity<>(service.incluir(form), HttpStatus.CREATED);
 	}
 }
