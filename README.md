@@ -16,7 +16,9 @@
 
 3: Instale o Lombok no eclipse, instruções: https://projectlombok.org/setup/eclipse
 
-4: Configurados, na pasta do projeto pelo terminal execute os comandos: [mvn clean install] e [mvn spring-boot:run]
+4: Configurados, na pasta do projeto pelo terminal execute os comandos: [mvn clean install -Dspring.profiles.active=dev] e [mvn spring-boot:run]
+
+5: Rodar pelo eclipse é necessário configurar o VM Arguments adicionando a seguinte configuração: -Dspring.profiles.active=dev
 
 - A API estará disponível no link (local) -> http://localhost:8080/
 - End-points criados disponível para teste em (local) -> http://localhost:8080/swagger-ui.html#/

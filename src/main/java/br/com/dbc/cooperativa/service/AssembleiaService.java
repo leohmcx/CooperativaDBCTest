@@ -54,7 +54,7 @@ public class AssembleiaService {
 		Pauta pEntity = pOne.orElseThrow(ResourceNotFoundException::new);
 
 		Optional<Assembleia> aOne = assembleiaRepository.findByPautaId(form.getPautaId());
-		Assembleia aEntity = aOne.orElse(assembleiaRepository.save(form.converter(assembleiaRepository, pEntity)));
+		Assembleia aEntity = aOne.orElseGet(() -> assembleiaRepository.save(form.converter(assembleiaRepository, pEntity)));
 
 		return new AssembleiaDto(aEntity);
 	}
